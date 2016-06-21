@@ -1,0 +1,56 @@
+sim_generated_configs:
+  description: config params created by the simulation for internal purposes
+  sim_output_path: None
+
+meta:
+  sim_number: 0
+  description: testing the configuration and simulation
+
+misc:
+  progress_bar:
+    show: True
+    base_position: 1
+
+logging:
+  base_level: 10
+  file_level: 20
+  console_level: 30
+  file_name: model_watts.log
+
+graph:
+  type: nx.MultiDiGraph()
+  generator: >-
+    nx.fast_gnp_random_graph(
+    n=self.config['single_sim']['num_agents'],
+    p=0.5)
+
+  nx_edge_list_filename: edge_list_nx.gz
+  remove_singleton: True # not used
+  force_directed: False
+  show: False
+
+agent:
+  init_value: 0
+  # np.random.beta(1, 1)
+  # '0.7'
+  threshold: '0.7'
+
+single_sim:
+  num_agents: 100
+  num_time_ticks: 100
+  seed_agents:
+    # self.config['single_sim']['num_agents'] * 0.10
+    # '7'
+    num_seed: '1'
+    seed_method: 'random'
+    seed_value: 1
+  scheduler:
+    type: random_sequential_update
+    # self.config['single_sim']['num_agents']
+    num_agents_update: self.config['single_sim']['num_agents']
+  # in bytes, 100kb = 100000 bytes
+  agent_write_size: 100000
+  agent_output_file: 'output_sim_ticks.csv'
+
+batch_sim:
+  runs: 10
