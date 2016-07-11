@@ -7,6 +7,7 @@ meta:
   description: testing the configuration and simulation
 
 misc:
+  num_cores: 3
   progress_bar:
     show: True
     base_position: 1
@@ -36,8 +37,8 @@ agent:
   threshold: '0.7'
 
 single_sim:
-  num_agents: 100
-  num_time_ticks: 100
+  num_agents: 1000
+  num_time_ticks: 1000
   seed_agents:
     # self.config['single_sim']['num_agents'] * 0.10
     # '7'
@@ -53,4 +54,8 @@ single_sim:
   agent_output_file: 'output_sim_ticks.csv'
 
 batch_sim:
-  runs: 10
+  # np.arange(0.10, 0.27, 0.01)
+  # np.linspace(0.10, 0.26, num=17, endpoint=True, dtype=float)
+  # '[0.2, 0.4, 0.6, 0.7]'
+  thresholds: "['0.12', '0.24']"
+  runs: range(100)
