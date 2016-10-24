@@ -1,0 +1,106 @@
+sim_generated_configs:
+  description: config params created by the simulation for internal purposes
+  sim_output_path: None
+
+meta:
+  sim_number: 0
+  description: metadata or description about the current simulation
+  sim_discription: testing the configuration and simulation
+
+misc:
+  num_cores: 3
+  progress_bar:
+    show: True
+    base_position: 1
+
+logging:
+  base_level: 10
+  file_level: 10
+  console_level: 10
+  file_name: model_lens_recurrent_attitudeDiffusion.log
+
+graph:
+  type: nx.MultiDiGraph()
+  generator: >-
+    nx.fast_gnp_random_graph(
+    n=self.config['single_sim']['num_agents'],
+    p=0.2)
+
+  nx_edge_list_filename: edge_list_nx.gz
+  remove_singleton: True # not used
+  force_directed: False
+  show: False
+
+agent:
+  num_banks: 2
+  bank_length: 10
+  bank_init_value: 0
+  bank_names: ['pos', 'neg']
+
+single_sim:
+  num_agents: 10
+  num_time_ticks: 10
+  seed_agents:
+    # self.config['single_sim']['num_agents'] * 0.10
+    # '7'
+    num_seed: '1'
+    seed_method: 'random'
+    cycle_after_seed: True
+    seed_value:
+      seed_value_method: 'random'
+      seed_value_options:
+        opt0:
+          pos: [0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+          neg: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  # random_1
+  update_sim_mode: random_1
+  scheduler:
+    type: random_sequential_update
+    # self.config['single_sim']['num_agents']
+    num_agents_update: self.config['single_sim']['num_agents']
+  # in bytes, 100kb = 100000 bytes
+  # 300 to get past the seed phase
+  agent_write_size: 100000
+  agent_output_file: 'output_sim_ticks.csv'
+
+lens:
+  prototype:
+    pos: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    neg: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  training:
+    num_examples: 50
+    criterion: 50
+    proto_mut_prob: 0.25
+    filename:
+      fn: lens_temp/train_wgt.ex
+      # apending agent id to False does not work yet
+      # need if statment in the ex file to account for toggle
+      append_agent_id: True
+  in_training: lens_in/global_cascades-01-train.in
+  seed:
+    in_seed_cycle: lens_in/global_cascades-02-update.in
+    # used if single_sim > seed_agents > cycle_after_seed is True
+    ex_file:
+      fn: lens_temp/seed_cycle.ex
+      # see comments in lens > training > filename > append_agent_id
+      append_agent_id: True
+    out_file:
+      fn: lens_temp/seed_cycle.out
+      # if you want this to be false need to pass in param into lens_env for in file
+      append_agent_id: True
+  sim:
+    in_file: lens_in/global_cascades-02-update.in
+    ex_file:
+      fn: lens_temp/sim.ex
+      append_agent_id: True
+    out_file:
+      # same name as ex_file
+      fn: lens_temp/sim.out
+      append_agent_id: True
+
+batch_sim:
+  # np.arange(0.10, 0.27, 0.01)
+  # np.linspace(0.10, 0.26, num=17, endpoint=True, dtype=float)
+  # '[0.2, 0.4, 0.6, 0.7]'
+  thresholds: "['0.12', '0.24']"
+  runs: range(100)

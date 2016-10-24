@@ -1,5 +1,10 @@
 *~
 
+src/simulations/lens_recurrent_attitudeDiffusion/lens_temp/*
+src/simulations/lens_recurrent_attitudeDiffusion/lens_weights/*
+src/simulations/lens_recurrent_attitudeDiffusion/edge_list_nx.gz
+src/simulations/lens_recurrent_attitudeDiffusion/output_sim_ticks.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
